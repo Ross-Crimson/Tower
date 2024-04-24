@@ -3,9 +3,11 @@ import { AppState } from '../AppState.js';
 import { computed, onMounted } from 'vue';
 import { eventsService } from '../services/EventsService.js';
 import EventCard from '../components/EventCard.vue';
+import ModalWrapper from '../components/ModalWrapper.vue';
+import EventForm from '../components/EventForm.vue';
 
 
-
+const account = computed(() => AppState.account)
 const events = computed(() => AppState.events)
 
 async function getEvents() {
@@ -23,7 +25,15 @@ onMounted(() => getEvents())
 <template>
   <section class="container">
     <div class="row">
-      <button><i class="mdi mdi-plus-circle"></i>Post Event</button>
+      <div>
+        <button v-if="account" type="button" class="btn btn-primary" data-bs-toggle="modal"
+          data-bs-target="#eventFormModal">
+          Create Event
+        </button>
+      </div>
+
+      <EventForm />
+
     </div>
     <!-- Event Cards -->
     <div class="row">
