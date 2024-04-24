@@ -7,12 +7,21 @@ import { AppState } from '../AppState.js';
 
 const route = useRoute()
 const event = computed(() => AppState.activeEvent)
+const account = computed(() => AppState.account)
 
 async function getEventById() {
     try {
         await eventsService.getEventById(route.params.eventId)
     } catch (error) {
-        error.console(error)
+        console.error(error)
+    }
+}
+
+async function cancelEvent() {
+    try {
+        await eventsService.cancelEvent(route.params.eventId)
+    } catch (error) {
+        console.error(error)
     }
 }
 
@@ -40,6 +49,22 @@ onBeforeMount(() => getEventById())
                         <h5>Location</h5>
                         <div><i class="mdi mdi-map-marker"></i>{{ event.location }}</div>
                     </div>
+                </div>
+
+                <div class="col-4">
+                    <div v-if="event?.isCanceled">
+                        <h5>Event Cancelled</h5>
+                        <button v-if="event?.creatorId == account?.id" @click="cancelEvent()"
+                            class="btn btn-success">Re-open
+                            Event</button>
+                    </div>
+                    <div v-else>
+                        <h5>Event Happening!</h5>
+                        <button v-if="event?.creatorId == account?.id" @click="cancelEvent()"
+                            class="btn btn-danger">Cancel
+                            Event</button>
+                    </div>
+
                 </div>
             </div>
         </div>
