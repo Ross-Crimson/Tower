@@ -16,16 +16,16 @@ class EventsService {
     }
     async createEvent(eventData) {
         const event = await dbContext.Events.create(eventData)
-        await event.populate('creator')
+        await event.populate(['creator', 'ticketCount'])
         return event
     }
     async getEvents() {
-        const events = await dbContext.Events.find().populate('creator')
+        const events = await dbContext.Events.find().populate(['creator', 'ticketCount'])
         return events
     }
 
     async getEventById(eventId) {
-        const event = await dbContext.Events.findById(eventId).populate('creator')
+        const event = await dbContext.Events.findById(eventId).populate(['creator', 'ticketCount'])
         if (!event) throw new Error(`No event found with id ${eventId}`)
         return event
     }
