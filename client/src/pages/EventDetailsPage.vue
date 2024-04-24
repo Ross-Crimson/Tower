@@ -8,6 +8,8 @@ import { AppState } from '../AppState.js';
 const route = useRoute()
 const event = computed(() => AppState.activeEvent)
 const account = computed(() => AppState.account)
+const ticketHolders = computed(() => AppState.activeEventTickets)
+const userHasTicket = computed(() => ticketHolders.value.find(holder => holder.accountId == AppState.account?.id))
 
 async function getEventById() {
     try {
@@ -25,7 +27,27 @@ async function cancelEvent() {
     }
 }
 
-onBeforeMount(() => getEventById())
+async function attendEvent() {
+    try {
+        const eventData = { eventId: route.params.eventId }
+        await eventsService.attendEvent(eventData)
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+async function getEventTicketHolders() {
+    try {
+        await eventsService.getEventTicketHolders(route.params.eventId)
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+onBeforeMount(() => {
+    getEventById()
+    getEventTicketHolders()
+})
 
 </script>
 
@@ -36,6 +58,10 @@ onBeforeMount(() => getEventById())
         <div v-if="event">
             <div class="row justify-content-center">
                 <img :src="event.coverImg" alt="" class="cover-img rounded img-fluid">
+                <div v-if="account">
+                    <div v-if="userHasTicket">You Are Attending</div>
+                    <div v-else>You should snaggle a ticket</div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-8">
@@ -64,7 +90,19 @@ onBeforeMount(() => getEventById())
                             class="btn btn-danger">Cancel
                             Event</button>
                     </div>
+                    <div>
+                        <div>Remaining Tickets: {{ event.capacity - event.ticketCount }}</div>
+                        <div>Attending: {{ event.ticketCount }} <i class="mdi mdi-account-group"></i></div>
+                        <div v-if="account">
 
+                            <button :disabled="event.ticketCount >= event.capacity || event.isCanceled || userHasTicket"
+                                @click="attendEvent()" class="btn btn-primary">Attend<i
+                                    class="mdi mdi-plus"></i></button>
+                        </div>
+                    </div>
+
+
+                    <div v-for="holder in ticketHolders" :key="holder.id">{{ holder.profile.name }}</div>
                 </div>
             </div>
         </div>
