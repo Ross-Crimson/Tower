@@ -1,6 +1,6 @@
 <script setup>
 import { AppState } from '../AppState.js';
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { eventsService } from '../services/EventsService.js';
 import EventCard from '../components/EventCard.vue';
 import ModalWrapper from '../components/ModalWrapper.vue';
@@ -8,7 +8,36 @@ import EventForm from '../components/EventForm.vue';
 
 
 const account = computed(() => AppState.account)
-const events = computed(() => AppState.events)
+const events = computed(() => {
+  if (filterBy.value == 'all') return AppState.events
+  return AppState.events.filter(event => event.type == filterBy.value)
+})
+
+const filterBy = ref('all')
+
+const filters = [
+  {
+    name: 'all',
+    icon: `mdi mdi-infinity`
+  },
+  {
+    name: 'concert',
+    icon: 'mdi mdi-guitar-electric'
+  },
+  {
+    name: 'convention',
+    icon: 'mdi mdi-account-group'
+  },
+  {
+    name: 'sport',
+    icon: 'mdi mdi-volleyball'
+  },
+  {
+    name: 'digital',
+    icon: 'mdi mdi-desktop-classic'
+  }
+
+]
 
 async function getEvents() {
   try {
@@ -24,6 +53,15 @@ onMounted(() => getEvents())
 
 <template>
   <section class="container">
+
+    <div class="row">
+      <div class="col-4 col-md-2 text-center" v-for="filterObj in filters" :key="filterObj.name">
+        <div @click="filterBy = filterObj.name" role="button" class="border border-dark rounded">{{ filterObj.name
+          }}<i :class="filterObj.icon"></i>
+        </div>
+      </div>
+    </div>
+
     <div class="row">
       <div>
         <button v-if="account" type="button" class="btn btn-primary" data-bs-toggle="modal"

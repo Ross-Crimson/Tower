@@ -26,6 +26,7 @@ async function createEvent() {
         const newEvent = await eventsService.createEvent(eventData.value)
         resetForm()
         Modal.getOrCreateInstance('#eventFormModal').hide()
+        router.push({ name: 'EventDetails', params: { eventId: newEvent.id } })
 
     } catch (error) {
         console.error(error)
