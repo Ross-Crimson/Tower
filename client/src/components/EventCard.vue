@@ -9,7 +9,7 @@ const props = defineProps({ event: { type: Event, required: true } })
 <template>
     <RouterLink :to="{ name: 'EventDetails', params: { eventId: event.id } }">
         <section>
-            <div class="card border m-3">
+            <div class="card border m-3 prevent-select">
                 <img :src="event.coverImg" alt="" class="card-img-top img-fluid">
                 <div class="card-body">
                     <div>

@@ -14,7 +14,7 @@ class EventsService{
         const response = await api.get('/account/tickets')
         const accountTickets = response.data.map(ticket => new Ticket(ticket))
         AppState.accountTickets = accountTickets
-        console.log(accountTickets)
+        //console.log(accountTickets)
     }
 
     async getEventTicketHolders(eventId) {
@@ -24,9 +24,9 @@ class EventsService{
     }
     async attendEvent(eventData) {
         const response = await api.post('api/tickets', eventData)
-        console.log(response.data)
+        //console.log(response.data)
         const ticket = new Ticket(response.data)
-        console.log(ticket)
+        //console.log(ticket)
         AppState.activeEvent.ticketCount++
         AppState.activeEventTickets.push(ticket)
     }

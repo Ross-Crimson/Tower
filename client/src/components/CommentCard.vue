@@ -22,19 +22,21 @@ async function deleteComment(commentId) {
 
 
 <template>
-    <section class="row">
+    <section class="row bg-light rounded m-1">
 
-        <div class="col-2">
-            <img class="img-fluid" :src="comment.creator?.picture" :alt="comment.creator.picture">
+        <div class="col-12 col-sm-2">
+            <div class="m-3">
+                <img class="img-fluid" :src="comment.creator?.picture" :alt="comment.creator.picture">
+            </div>
         </div>
-        <div class="col-10">
-            <div>
+        <div class="col-12 col-sm-10">
+            <div class="mt-2">
                 <h5>
                     {{ comment.creator.name }}
                 </h5>
                 <p>{{ comment.body }}</p>
                 <div v-if="account?.id == comment?.creatorId" class="text-end">
-                    <button @click="deleteComment(comment.id)" class="btn btn-danger"><i
+                    <button @click="deleteComment(comment.id)" class="btn btn-danger mb-2"><i
                             class="mdi mdi-delete"></i></button>
                 </div>
             </div>

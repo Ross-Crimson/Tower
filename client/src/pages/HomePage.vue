@@ -54,29 +54,46 @@ onMounted(() => getEvents())
 <template>
   <section class="container">
 
-    <div class="row">
-      <div class="col-4 col-md-2 text-center" v-for="filterObj in filters" :key="filterObj.name">
-        <div @click="filterBy = filterObj.name" role="button" class="border border-dark rounded">{{ filterObj.name
-          }}<i :class="filterObj.icon"></i>
+    <div v-if="account" class="row justify-content-center">
+
+      <div class="col-12 col-md-5 text-center">
+
+        <div class="d-flex justify-content-center bg-secondary rounded m-4 p-3 prevent-select pointer"
+          data-bs-toggle="modal" data-bs-target="#eventFormModal">
+          <div class="">
+            <i class="mdi mdi-plus text-success fs-3"></i>
+          </div>
+          <div>
+            <h5>Make an Event!</h5>
+            <p>Create an Event for people to meet and share hobbies, interests, and activities</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <h5 class="p-3">Explore Categories</h5>
+      <div class="col-6 col-md-2 text-center prevent-select" v-for="filterObj in filters" :key="filterObj.name">
+        <div @click="filterBy = filterObj.name" role="button" class="border border-dark rounded p-2 m-3">
+          <div class="text-break">
+            {{ filterObj.name }}
+          </div>
+          <div>
+            <i :class="filterObj.icon"></i>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="row">
-      <div>
-        <button v-if="account" type="button" class="btn btn-primary" data-bs-toggle="modal"
-          data-bs-target="#eventFormModal">
-          Create Event
-        </button>
-      </div>
-
+      <h5 class="p-3">Upcoming Events</h5>
       <EventForm />
 
     </div>
     <!-- Event Cards -->
     <div class="row">
       <div></div>
-      <div v-for="event in events" :key="event.id" class="col-4">
+      <div v-for="event in events" :key="event.id" class="col-6 col-md-4">
         <EventCard :event="event" />
       </div>
     </div>

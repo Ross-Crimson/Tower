@@ -91,45 +91,56 @@ onBeforeMount(() => {
         <div v-if="event">
             <div class="row justify-content-center">
                 <img :src="event.coverImg" alt="" class="cover-img rounded img-fluid">
-                <div v-if="account">
+                <div v-if="account" class="text-center fw-bold">
                     <div v-if="userHasTicket">You Are Attending</div>
                     <div v-else>You should snaggle a ticket</div>
                 </div>
             </div>
+
             <div class="row">
-                <div class="col-8">
-                    <h3>{{ event.name }} <span>{{ event.type }}</span></h3>
-                    <p>{{ event.description }}</p>
-                    <div>
+                <hr>
+                <div class="col-12 col-md-8 order-2 order-md-1">
+                    <h3 class="m-2 mb-4">{{ event.name }} <span>{{ event.type }}</span></h3>
+                    <p class="m-2 mb-4">{{ event.description }}</p>
+                    <div class="m-2 mb-4">
                         <h5>Date and Time</h5>
-                        <div>{{ event.startDate.toLocaleDateString() }}</div>
+                        <div><i class="mdi mdi-calendar-range"></i>{{ event.startDate.toLocaleDateString() }}</div>
                     </div>
-                    <div>
+                    <div class="m-2 mb-4">
                         <h5>Location</h5>
                         <div><i class="mdi mdi-map-marker"></i>{{ event.location }}</div>
                     </div>
 
-                    <!-- Post Comment -->
-                    <div v-if="account">
-                        <form @submit.prevent="createComment()" class="d-flex flex-column">
-                            <textarea v-model="commentData.body" name="comment-body" id="comment-body" cols="30"
-                                rows="5" required minlength="3" placeholder="Talk about the event!"></textarea>
-                            <div class="text-end">
-
-                                <button class="btn btn-primary" type="submit">Post <i class="mdi mdi-send"></i></button>
-                            </div>
-                        </form>
+                    <div class="my-3">
+                        <h5>See what people are saying...</h5>
                     </div>
 
-                    <!-- Display Comments -->
-                    <div v-if="comments" class="">
-                        <div v-for="comment in comments" :key="comment.id">
-                            <CommentCard :comment="comment" />
+                    <div class="bg-secondary rounded p-3">
+
+                        <!-- Post Comment -->
+                        <div v-if="account" class="mb-3">
+                            <form @submit.prevent="createComment()" class="d-flex flex-column">
+                                <textarea v-model="commentData.body" name="comment-body" id="comment-body" cols="30"
+                                    rows="5" required minlength="3" placeholder="Talk about the event!"></textarea>
+                                <div class="text-end">
+
+                                    <button class="btn btn-primary mt-2" type="submit">Post <i
+                                            class="mdi mdi-send"></i></button>
+                                </div>
+                            </form>
                         </div>
+
+                        <!-- Display Comments -->
+                        <div v-if="comments" class="">
+                            <div v-for="comment in comments" :key="comment.id">
+                                <CommentCard :comment="comment" />
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
-                <div class="col-4">
+                <div class="col-12 col-md-4 order-1 order-md-2">
                     <div v-if="event?.isCanceled">
                         <h5>Event Cancelled</h5>
                         <button v-if="event?.creatorId == account?.id" @click="cancelEvent()"
@@ -157,12 +168,14 @@ onBeforeMount(() => {
                         <div class="row">
                             <div class="col-4">
 
-                                <div>
+                                <div class="m-2">
                                     <img class="img-fluid" :src="holder.profile.picture" alt="">
                                 </div>
                             </div>
-                            <div class="col-8">
-                                {{ holder.profile.name }}
+                            <div class="col-8 align-content-center">
+                                <div class="m-2">
+                                    {{ holder.profile.name }}
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -21,3 +21,22 @@ a {
   text-decoration: none;
 }
 
+.prevent-select {
+  -webkit-user-select: none;
+  /* Safari */
+  -ms-user-select: none;
+  /* IE 10 and IE 11 */
+  user-select: none;
+  /* Standard syntax */
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+hr {
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 50%;
+  border-color: rgb(51, 51, 51);
+}
