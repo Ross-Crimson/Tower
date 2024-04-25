@@ -6,6 +6,7 @@ import { Forbidden } from "../utils/Errors.js"
 class EventsService {
     async editEvent(eventId, eventData) {
         const eventToUpdate = await this.getEventById(eventId)
+        if (eventToUpdate.isCanceled) throw new Error('Cannot update a cancelled event')
         if (eventToUpdate.creatorId != eventData.creatorId) throw new Forbidden(`You do not have access to update event: ${eventId}`)
 
         eventToUpdate.name = eventData.name ?? eventToUpdate.name

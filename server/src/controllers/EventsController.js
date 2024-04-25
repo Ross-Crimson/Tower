@@ -2,6 +2,7 @@ import { Auth0Provider } from "@bcwdev/auth0provider";
 import { eventsService } from "../services/EventsServices.js";
 import BaseController from "../utils/BaseController.js";
 import { ticketsService } from "../services/TicketsService.js";
+import { commentsService } from "../services/CommentsService.js";
 
 
 
@@ -12,6 +13,7 @@ export class EventsController extends BaseController {
             .get('', this.getEvents)
             .get('/:eventId', this.getEventById)
             .get('/:eventId/tickets', this.getUsersTickets)
+            .get('/:eventId/comments', this.getEventComments)
             .use(Auth0Provider.getAuthorizedUserInfo)
             .post('', this.createEvent)
             .put('/:eventId', this.editEvent)
@@ -44,6 +46,16 @@ export class EventsController extends BaseController {
             const eventId = request.params.eventId
             const event = await eventsService.getEventById(eventId)
             response.send(event)
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async getEventComments(request, response, next) {
+        try {
+            const eventId = request.params.eventId
+            const eventComments = await commentsService.getEventComments(eventId)
+            response.send(eventComments)
         } catch (error) {
             next(error)
         }
