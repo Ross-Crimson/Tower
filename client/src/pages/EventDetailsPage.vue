@@ -1,8 +1,10 @@
 <script setup>
-import { computed, onBeforeMount } from 'vue';
+import { computed, onBeforeMount, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { eventsService } from '../services/EventsService.js';
 import { AppState } from '../AppState.js';
+import { commentsService } from '../services/CommentsService.js';
+import CommentCard from '../components/CommentCard.vue';
 
 
 const route = useRoute()
@@ -10,6 +12,17 @@ const event = computed(() => AppState.activeEvent)
 const account = computed(() => AppState.account)
 const ticketHolders = computed(() => AppState.activeEventTickets)
 const userHasTicket = computed(() => ticketHolders.value.find(holder => holder.accountId == AppState.account?.id))
+
+const comments = computed(() => AppState.activeEventComments)
+
+const commentData = ref({
+    body: '',
+    eventId: route.params.eventId
+})
+
+function resetCommentForm() {
+    commentData.value = { body: '', eventId: route.params.eventId }
+}
 
 async function getEventById() {
     try {
@@ -44,9 +57,29 @@ async function getEventTicketHolders() {
     }
 }
 
+async function getEventComments() {
+    try {
+        await commentsService.getEventComments(route.params.eventId)
+
+    }
+    catch (error) {
+        console.error(error)
+    }
+}
+
+async function createComment() {
+    try {
+        await commentsService.createComment(commentData.value)
+        resetCommentForm()
+    } catch (error) {
+        console.error(error)
+    }
+}
+
 onBeforeMount(() => {
     getEventById()
     getEventTicketHolders()
+    getEventComments()
 })
 
 </script>
@@ -75,6 +108,25 @@ onBeforeMount(() => {
                         <h5>Location</h5>
                         <div><i class="mdi mdi-map-marker"></i>{{ event.location }}</div>
                     </div>
+
+                    <!-- Post Comment -->
+                    <div v-if="account">
+                        <form @submit.prevent="createComment()" class="d-flex flex-column">
+                            <textarea v-model="commentData.body" name="comment-body" id="comment-body" cols="30"
+                                rows="5" required minlength="3" placeholder="Talk about the event!"></textarea>
+                            <div class="text-end">
+
+                                <button class="btn btn-primary" type="submit">Post <i class="mdi mdi-send"></i></button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Display Comments -->
+                    <div v-if="comments" class="">
+                        <div v-for="comment in comments" :key="comment.id">
+                            <CommentCard :comment="comment" />
+                        </div>
+                    </div>
                 </div>
 
                 <div class="col-4">
@@ -101,8 +153,19 @@ onBeforeMount(() => {
                         </div>
                     </div>
 
+                    <div v-for="holder in ticketHolders" :key="holder.id">
+                        <div class="row">
+                            <div class="col-4">
 
-                    <div v-for="holder in ticketHolders" :key="holder.id">{{ holder.profile.name }}</div>
+                                <div>
+                                    <img class="img-fluid" :src="holder.profile.picture" alt="">
+                                </div>
+                            </div>
+                            <div class="col-8">
+                                {{ holder.profile.name }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
