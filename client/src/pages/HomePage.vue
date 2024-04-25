@@ -74,7 +74,7 @@ onMounted(() => getEvents())
     <div class="row justify-content-center">
       <h5 class="p-3">Explore Categories</h5>
       <div class="col-6 col-md-2 text-center prevent-select" v-for="filterObj in filters" :key="filterObj.name">
-        <div @click="filterBy = filterObj.name" role="button" class="border border-dark rounded p-2 m-3">
+        <div @click="filterBy = filterObj.name" role="button" class="border border-success rounded p-2 m-3">
           <div class="text-break">
             {{ filterObj.name }}
           </div>

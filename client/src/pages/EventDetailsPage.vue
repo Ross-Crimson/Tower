@@ -90,7 +90,7 @@ onBeforeMount(() => {
 
         <div v-if="event">
             <div class="row justify-content-center">
-                <img :src="event.coverImg" alt="" class="cover-img rounded img-fluid">
+                <img :src="event.coverImg" alt="" class="cover-img img-fluid">
                 <div v-if="account" class="text-center fw-bold">
                     <div v-if="userHasTicket">You Are Attending</div>
                     <div v-else>You should snaggle a ticket</div>
@@ -98,13 +98,14 @@ onBeforeMount(() => {
             </div>
 
             <div class="row">
-                <hr>
+                <hr class="my-4">
                 <div class="col-12 col-md-8 order-2 order-md-1">
                     <h3 class="m-2 mb-4">{{ event.name }} <span>{{ event.type }}</span></h3>
                     <p class="m-2 mb-4">{{ event.description }}</p>
                     <div class="m-2 mb-4">
                         <h5>Date and Time</h5>
-                        <div><i class="mdi mdi-calendar-range"></i>{{ event.startDate.toLocaleDateString() }}</div>
+                        <div><i class="mdi mdi-calendar-range"></i>{{ event.startDate.toLocaleDateString() }} at {{
+                            event.startDate.toLocaleTimeString() }}</div>
                     </div>
                     <div class="m-2 mb-4">
                         <h5>Location</h5>
@@ -115,7 +116,7 @@ onBeforeMount(() => {
                         <h5>See what people are saying...</h5>
                     </div>
 
-                    <div class="bg-secondary rounded p-3">
+                    <div class="bg-secondary rounded p-3 mb-2">
 
                         <!-- Post Comment -->
                         <div v-if="account" class="mb-3">
@@ -154,26 +155,23 @@ onBeforeMount(() => {
                             Event</button>
                     </div>
                     <div>
-                        <div>Remaining Tickets: {{ event.capacity - event.ticketCount }}</div>
-                        <div>Attending: {{ event.ticketCount }} <i class="mdi mdi-account-group"></i></div>
+                        <div class="mb-2">Remaining Tickets: {{ event.capacity - event.ticketCount }}</div>
+                        <div class="mb-2">Attending: {{ event.ticketCount }} <i class="mdi mdi-account-group"></i></div>
                         <div v-if="account">
 
                             <button :disabled="event.ticketCount >= event.capacity || event.isCanceled || userHasTicket"
-                                @click="attendEvent()" class="btn btn-primary">Attend<i
+                                @click="attendEvent()" class="btn btn-primary my-2">Attend<i
                                     class="mdi mdi-plus"></i></button>
                         </div>
                     </div>
 
                     <div v-for="holder in ticketHolders" :key="holder.id">
                         <div class="row">
-                            <div class="col-4">
-
-                                <div class="m-2">
-                                    <img class="img-fluid" :src="holder.profile.picture" alt="">
+                            <div class="d-flex bg-secondary">
+                                <div class="px-2 py-3">
+                                    <img class="img-fluid profile-img-circle" :src="holder.profile.picture" alt="">
                                 </div>
-                            </div>
-                            <div class="col-8 align-content-center">
-                                <div class="m-2">
+                                <div class="px-2 py-3">
                                     {{ holder.profile.name }}
                                 </div>
                             </div>
@@ -191,7 +189,7 @@ onBeforeMount(() => {
 .cover-img {
     background-position: center;
     background-size: cover;
-    height: 50dvh;
+    max-height: 50dvh;
     width: auto;
 }
 </style>

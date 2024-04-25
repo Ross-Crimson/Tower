@@ -7,9 +7,9 @@ const props = defineProps({ event: { type: Event, required: true } })
 
 
 <template>
-    <RouterLink :to="{ name: 'EventDetails', params: { eventId: event.id } }">
-        <section>
-            <div class="card border m-3 prevent-select">
+    <section>
+        <div class="card border m-3 prevent-select">
+            <RouterLink :to="{ name: 'EventDetails', params: { eventId: event.id } }">
                 <img :src="event.coverImg" alt="" class="card-img-top img-fluid">
                 <div class="card-body">
                     <div>
@@ -17,10 +17,14 @@ const props = defineProps({ event: { type: Event, required: true } })
                     </div>
                     <div v-if="event.creator">Hosted By {{ event.creator.name }}</div>
                 </div>
-            </div>
-        </section>
-    </RouterLink>
+            </RouterLink>
+        </div>
+    </section>
 </template>
 
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+a {
+    color: inherit;
+}
+</style>

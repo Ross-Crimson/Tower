@@ -32,8 +32,10 @@ onMounted(() => getUserEvents())
 <template>
   <div class="about text-center">
     <div v-if="account">
-      <h1>Welcome {{ account.name }}</h1>
-      <img class="rounded" :src="account.picture" alt="" />
+      <h1 class="mb-3">Welcome {{ account.name }}</h1>
+      <div class="mb-3">
+        <img class="rounded" :src="account.picture" alt="" />
+      </div>
     </div>
     <div v-else>
       <h1>Loading... <i class="mdi mdi-loading mdi-spin"></i></h1>
@@ -41,15 +43,17 @@ onMounted(() => getUserEvents())
   </div>
 
   <section class="container">
-    <div class="row">
+    <!-- <div class="row">
       <h3>Your Events</h3>
-    </div>
+    </div> -->
 
     <div v-if="tickets" class="row">
       <h3>Upcoming Events</h3>
-      <div v-for="ticket in tickets" :key="ticket.id" class="col-4">
-        <EventCard :event="ticket.event" />
-        <button @click="unattendEvent(ticket.id)" class="btn btn-primary">Unattend</button>
+      <div v-for="ticket in tickets" :key="ticket.id" class="col-6 col-md-4 pb-3">
+        <div class="text-center">
+          <EventCard :event="ticket.event" />
+          <button @click="unattendEvent(ticket.id)" class="btn btn-primary">Unattend</button>
+        </div>
       </div>
     </div>
   </section>
