@@ -1,8 +1,31 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { AppState } from '../AppState.js';
+import { eventsService } from '../services/EventsService.js';
+import { Event } from "../models/Event.js"
+import EventCard from '../components/EventCard.vue';
 
 const account = computed(() => AppState.account)
+const tickets = computed(() => AppState.accountTickets)
+
+async function getUserEvents() {
+  try {
+    await eventsService.getUserEvents()
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+async function unattendEvent(eventId) {
+  try {
+    await eventsService.unattendEvent(eventId)
+  }
+  catch (error) {
+    console.error(error)
+  }
+}
+
+onMounted(() => getUserEvents())
 
 </script>
 
@@ -11,12 +34,26 @@ const account = computed(() => AppState.account)
     <div v-if="account">
       <h1>Welcome {{ account.name }}</h1>
       <img class="rounded" :src="account.picture" alt="" />
-      <p>{{ account.email }}</p>
     </div>
     <div v-else>
       <h1>Loading... <i class="mdi mdi-loading mdi-spin"></i></h1>
     </div>
   </div>
+
+  <section class="container">
+    <div class="row">
+      <h3>Your Events</h3>
+    </div>
+
+    <div v-if="tickets" class="row">
+      <h3>Upcoming Events</h3>
+      <div v-for="ticket in tickets" :key="ticket.id" class="col-4">
+        <EventCard :event="ticket.event" />
+        <button @click="unattendEvent(ticket.id)" class="btn btn-primary">Unattend</button>
+      </div>
+    </div>
+  </section>
+
 </template>
 
 <style scoped lang="scss">

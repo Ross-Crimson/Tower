@@ -1,4 +1,5 @@
 import { Account } from "./Account.js"
+import { Event} from "./Event.js"
 
 
 export class Ticket{

@@ -5,6 +5,18 @@ import { Ticket } from "../models/Ticket.js"
 
 
 class EventsService{
+    async unattendEvent(ticketId) {
+      const response = await api.delete(`api/tickets/${ticketId}`)
+      const indexToRemove = AppState.accountTickets.findIndex(ticket => ticket.id == ticketId)
+      AppState.accountTickets.splice(indexToRemove, 1)
+    }
+    async getUserEvents() {
+        const response = await api.get('/account/tickets')
+        const accountTickets = response.data.map(ticket => new Ticket(ticket))
+        AppState.accountTickets = accountTickets
+        console.log(accountTickets)
+    }
+
     async getEventTicketHolders(eventId) {
         const response = await api.get(`api/events/${eventId}/tickets`)
         const ticketHolders = response.data.map(holder => new Ticket(holder))

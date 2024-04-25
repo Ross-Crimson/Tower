@@ -15,7 +15,7 @@ const props = defineProps({ event: { type: Event, required: true } })
                     <div>
                         {{ event.name }}
                     </div>
-                    <div>Hosted By {{ event.creator.name }}</div>
+                    <div v-if="event.creator">Hosted By {{ event.creator.name }}</div>
                 </div>
             </div>
         </section>
