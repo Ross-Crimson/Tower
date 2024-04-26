@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { eventsService } from '../services/EventsService.js';
 import { Modal } from 'bootstrap';
+import Pop from '../utils/Pop.js';
 
 const router = useRouter()
 
@@ -30,6 +31,7 @@ async function createEvent() {
 
     } catch (error) {
         console.error(error)
+        Pop.error("Couldn't make new event")
     }
 }
 
